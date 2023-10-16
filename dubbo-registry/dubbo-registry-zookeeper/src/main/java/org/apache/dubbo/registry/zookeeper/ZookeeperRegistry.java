@@ -170,9 +170,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
                     for (String path : toCategoriesPath(url)) {
                         ConcurrentMap<NotifyListener, ChildListener> listeners = zkListeners.computeIfAbsent(url, k -> new ConcurrentHashMap<>());
                         ChildListener zkListener = listeners.computeIfAbsent(listener, k -> new RegistryChildListenerImpl(url, k, latch));
-                        if (zkListener instanceof RegistryChildListenerImpl) {
-                            ((RegistryChildListenerImpl) zkListener).setLatch(latch);
-                        }
+
                         zkClient.create(path, false);
                         List<String> children = zkClient.addChildListener(path, zkListener);
                         if (children != null) {
